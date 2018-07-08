@@ -1,0 +1,35 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+env:
+  global:
+    - DOCKER_IMAGE=rss-bridge
+    - LATEST=2018-06-10
+    - VERSION_KEEP_PATCH=true
+  matrix:
+    - VERSION=2018-06-10
+    - VERSION=master
+
+before_install:
+  - ./install-docker.sh
+
+install: true
+
+before_script:
+  - docker --version
+  - docker info
+
+script:
+  - docker build --build-arg=RSS_BRIDGE_VERSION=${VERSION} -t ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${VERSION} ./
+
+before_deploy:
+  - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+
+deploy:
+  provider: script
+  script: ./deploy.sh
+  on:
+    branch: master
+
