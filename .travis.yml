@@ -6,14 +6,15 @@ services:
 env:
   global:
     - DOCKER_IMAGE=rss-bridge
-    - LATEST=2018-06-10
+    - LATEST=2018-08-07
     - VERSION_KEEP_PATCH=true
   matrix:
+    - VERSION=2018-08-07
     - VERSION=2018-06-10
     - VERSION=master
 
 before_install:
-  - ./install-docker.sh
+  - ./ci/install-docker.sh
 
 install: true
 
@@ -23,9 +24,11 @@ before_script:
 
 script:
   - docker build --build-arg=RSS_BRIDGE_VERSION=${VERSION} -t ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${VERSION} ./
+  - docker-compose -f ./ci/docker-compose.yml -d
+  - curl "http://localhost/?action=display&bridge=Twitter&u=sadserver&format=Atom" | grep "<feed"
 
 before_deploy:
-  - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+  - ./ci/docker-login.sh
 
 deploy:
   provider: script
