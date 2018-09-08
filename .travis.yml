@@ -32,7 +32,7 @@ before_deploy:
 
 deploy:
   provider: script
-  script: ./deploy.sh
+  script: ./ci/deploy.sh
   on:
     branch: master
 
