@@ -24,7 +24,7 @@ before_script:
 
 script:
   - docker build --build-arg=RSS_BRIDGE_VERSION=${VERSION} -t ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${VERSION} ./
-  - docker-compose -f ./ci/docker-compose.yml -d
+  - docker-compose -f ./ci/docker-compose.yml up -d
   - curl "http://localhost:8080/?action=display&bridge=Twitter&u=sadserver&format=Atom" | grep "<feed"
 
 before_deploy:
