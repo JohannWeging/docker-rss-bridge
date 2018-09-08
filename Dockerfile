@@ -3,7 +3,8 @@ FROM johannweging/base-alpine:latest
 ENV RSS_BRIDGE_VERSION=${RSS_BRIDGE_VERSION}
 
 RUN set -x \
-&& apk add --update --no-cache nginx php7-fpm php7-openssl php7-mbstring php7-simplexml php7-curl
+&& apk add --update --no-cache nginx php7-fpm php7-openssl \
+   php7-mbstring php7-simplexml php7-curl php7-json
 
 RUN set -x \
 && apk add --no-cache --virtual .dep git \
